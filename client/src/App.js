@@ -11,9 +11,13 @@ class App extends React.Component {
     this.ask = this.ask.bind(this)
   }
   async ask() {
+    console.log(this.state.question)
     await fetch('http://localhost:3001/server',{
       method:'POST',
-      body: JSON.stringify({name:this.state.question})
+      headers: {
+        'Content-Type': 'application/json'
+    },
+      body: JSON.stringify({"name":`${this.state.question}`})
     }).then(response => response.json()).then(
       data => {
         this.setState({

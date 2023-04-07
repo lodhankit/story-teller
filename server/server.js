@@ -1,40 +1,35 @@
 const express = require('express')
 require('dotenv').config()
+const fetch = require('node-fetch');
 const cors = require('cors')
+const bodyParser = require('body-parser')
 const app = express()
 const port = 3001
-const { Configuration, OpenAIApi } = require("openai");
+//const { Configuration, OpenAIApi } = require("openai");
 
 app.listen(port, () => {
     console.log(`app listening at on port ${port}`)
 })
 app.use(cors())
-async function fetchData() {
-    const configuration = new Configuration({
-        apiKey: process.env.OPENAI_API_KEY,
-    });
-    const openai = new OpenAIApi(configuration);
-
-    const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: "Hello world",
-        temperature: 0.5,
-        maxTokens: 100,
-        n: 1,
-        stream: false,
-        stop: "\n"
-    },
-        {
-            timeout: 10000
-        });
-    return response
+//app.use(bodyParser.urlencoded())
+//app.use(bodyParser.json())
+app.use(express.json())
+async function fetchData(data) {
+    const api = process.env.OPENAI_API_KEY
+	const response = await fetch(
+		"https://api-inference.huggingface.co/models/Meli/GPT2-Prompt",
+		{
+			headers: { Authorization: `Bearer ${api}` },
+			method: "POST",
+			body: JSON.stringify(data),
+		}
+	);
+	const result = await response.json();
+	return result;
 }
-app.post("/server", (req, res) => {
-    console.log("====================================")
-    console.log(req)
-    console.log("===========================================")
-    //fetchData().then(response => { console.log(response.data.choices[0].text) }).catch(err => {
-    //    console.error(err)
-    //})
-    res.json({ "name": "I am good" })
+app.post("/server", async (req, res) => {
+    let data = req.body.name
+    let skip = "The model is loading please try again"
+    let story = await fetchData(data).then(response =>  response[0]['generated_text'] ).catch(err => skip)
+    res.json({ "name": `${story}`})
 })

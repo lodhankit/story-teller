@@ -13,8 +13,10 @@
     "nodemon": "^2.0.22"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
+    "node-fetch": "^2.6.9",
     "openai": "^3.2.1"
   }
 }
