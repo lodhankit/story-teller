@@ -1,6 +1,5 @@
 import './App.css';
 import React from 'react';
-const { Configuration, OpenAIApi } = require("openai");
 class App extends React.Component {
   constructor() {
     super()
@@ -11,11 +10,22 @@ class App extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.ask = this.ask.bind(this)
   }
-  ask() {
-   
-    this.setState({
-      message: 'I am good'
+  async ask() {
+    await fetch('http://localhost:3001/server',{
+      method:'POST',
+      body: JSON.stringify({name:this.state.question})
+    }).then(response => response.json()).then(
+      data => {
+        this.setState({
+          message:data["name"]
+        })
+      }
+    ).catch(err => {
+      console.log("this is an error")
     })
+    //this.setState({
+    //  message: 'I am good'
+    //})
   }
   handleChange(event) {
     this.setState({
