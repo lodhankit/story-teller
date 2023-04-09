@@ -17,7 +17,7 @@ app.use(express.json())
 async function fetchData(data) {
     const api = process.env.OPENAI_API_KEY
 	const response = await fetch(
-		"https://api-inference.huggingface.co/models/Meli/GPT2-Prompt",
+		"https://api-inference.huggingface.co/models/openai-gpt",
 		{
 			headers: { Authorization: `Bearer ${api}` },
 			method: "POST",

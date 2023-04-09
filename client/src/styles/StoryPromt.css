@@ -1,0 +1,16 @@
+.answer{
+    font-size: 17px;
+    font-family: monospace;
+    margin: 50px 0px 0px 0px
+}
+
+.text{
+    width:50%
+}
+
+.qs{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 200px 0px 0px 0px
+}
