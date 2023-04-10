@@ -8,9 +8,51 @@
     width:50%
 }
 
+.tokens{
+    width:30%
+}
+.tk{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 100px 0px 0px 0px
+}
 .qs{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 200px 0px 0px 0px
+    margin: 30px 0px 0px 0px
 }
+
+.pgb{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0px 0px 0px
+}
+
+.pb{
+    width:70%
+}
+
+.pbh {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px 0px 30px 0px
+}
+
+h4{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0px 0px 0px;
+    animation: blink-animation 1s infinite;
+    color:green;
+}
+
+@keyframes blink-animation {
+    50% {
+      opacity: 0;
+    }
+  }

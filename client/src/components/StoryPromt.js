@@ -2,24 +2,26 @@ import React from 'react';
 import '../styles/StoryPromt.css';
 import { InputGroup, Button, Input } from 'reactstrap';
 import { FaTelegramPlane } from "react-icons/fa";
+import Progressbar from './Progressbar';
 
 class StoryPromt extends React.Component {
   constructor() {
     super()
     this.state = {
       question: '',
-      clone:'',
+      clone: '',
       message: '',
       count: 0,
-      word:0
+      word: 1,
+      wordsize: 0
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.ask = this.ask.bind(this)
   }
-  handleClick(e){
+  handleClick(e) {
     this.setState({
-      word:e.target.value
+      word: e.target.value
     })
   }
   async ask() {
@@ -40,7 +42,7 @@ class StoryPromt extends React.Component {
         let qn = this.state.clone.split(" ").length
         let arr = data["name"].split(" ")
         let answer = "";
-        for(let i = 0 ; i < qn ; i++){
+        for (let i = 0; i < qn; i++) {
           answer += arr[i] + " "
         }
         this.setState({
@@ -51,6 +53,11 @@ class StoryPromt extends React.Component {
           this.setState({
             message: answer
           })
+          if (answer.length % 2 === 0) {
+            this.setState({
+              wordsize: this.state.wordsize + 1
+            })
+          }
           await sleep(100)
         }
       }
@@ -68,7 +75,10 @@ class StoryPromt extends React.Component {
     await sleep(100)
     if (this.state.count === 50 || this.state.message === "The model is loading please try again ") {
       this.setState({
-        question:''
+        question: ''
+      })
+      this.setState({
+        wordsize: 100
       })
       return
     }
@@ -90,18 +100,38 @@ class StoryPromt extends React.Component {
   }
   render() {
     let res = this.state.message
+    let generated = "";
+    if(this.state.wordsize === 100){
+       generated = "The story is generated!!!"
+    }
     return (
-      <div className='row'>
-        <InputGroup className="qs">
-          <Input value={this.state.word} onChange={this.handleClick} />
-          <div className='col-xs-11 text'>
-            <Input value={this.state.question} onChange={this.handleChange} />
-          </div>
-          <div className='col-xs-1'>
-            <Button id="bt" color="success" onClick={this.ask}>Generate <FaTelegramPlane /></Button>
-          </div>
-        </InputGroup>
-        <p className="answer">{res}</p>
+      <div>
+        <div className='row'>
+          <InputGroup className="tk">
+            <div className='col-xs-11 tokens'>
+              <Input value={this.state.word} onChange={this.handleClick} />
+            </div>
+            <div className='col-xs-1'>
+              <Button color="primary">Tokens Number</Button>
+            </div>
+          </InputGroup>
+        </div>
+        <div className='row'>
+          <InputGroup className="qs">
+            <div className='col-xs-11 text'>
+              <Input value={this.state.question} onChange={this.handleChange} />
+            </div>
+            <div className='col-xs-1'>
+              <Button id="bt" color="success" onClick={this.ask}>Generate <FaTelegramPlane /></Button>
+            </div>
+          </InputGroup>
+        </div>
+        <div className='pgb row'>
+          <h3 class="pbh">Progress of generated Story</h3>
+          <Progressbar progress={this.state.wordsize} />
+          <p className="answer">{res}</p>
+        </div>
+        <h4>{generated}</h4>
       </div>
     )
   }
